@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Contact;
+use Illuminate\Http\JsonResponse;
 
 class ContactController extends Controller
 {
@@ -54,7 +55,7 @@ class ContactController extends Controller
      */
     public function show($id)
     {
-        //
+        return Contact::find($id);
     }
 
     /**
@@ -77,7 +78,15 @@ class ContactController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $contact = Contact::find($id);
+
+        $contact->first_name = $request->input('first_name');
+        $contact->last_name = $request->input('last_name');
+        $contact->email = $request->input('email');
+
+        $contact->save();
+
+        return $contact;
     }
 
     /**
@@ -88,6 +97,10 @@ class ContactController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $contact = Contact::find($id);
+
+        $contact->delete();
+
+        return new JsonResponse(true);
     }
 }
